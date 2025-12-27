@@ -21,6 +21,24 @@ def inject_custom_css():
             font-family: 'Roboto', sans-serif;
         }
         
+        /* Container - Centered with max-width */
+        .main .block-container {
+            max-width: 1400px;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            padding-top: 3rem;
+            padding-bottom: 3rem;
+            margin: 0 auto;
+        }
+        
+        /* Responsive padding */
+        @media (max-width: 768px) {
+            .main .block-container {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+        
         /* Headers - Material Typography */
         h1, h2, h3 {
             font-family: 'Roboto Slab', serif;

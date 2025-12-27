@@ -23,12 +23,12 @@ class ContentRecommender:
         self.anime_df['synopsis'] = self.anime_df['synopsis'].fillna('')
         self.anime_df['rating'] = self.anime_df['rating'].fillna(0)
         
-        # Weighted Soup: Genre is most important, Type adds context, Synopsis adds detail
-        # We repeat genre to give it more weight naturally in the text
+        # Weighted Soup: Synopsis gets highest weight for better plot-based recommendations
+        # Synopsis is repeated 3x for high importance, Genre 2x for context, Type 1x
         self.anime_df['soup'] = (
-            (self.anime_df['genre'] + " ") * 2 + 
-            self.anime_df['type'] + " " + 
-            self.anime_df['synopsis']
+            (self.anime_df['synopsis'] + " ") * 3 +  # High weight for plot similarity
+            (self.anime_df['genre'] + " ") * 2 +      # Medium weight for genre matching
+            self.anime_df['type']                      # Low weight for type
         )
         
         tfidf = TfidfVectorizer(stop_words='english', min_df=3, max_features=5000)
@@ -128,7 +128,7 @@ class HybridRecommender:
         self.content_engine.fit()
         self.collab_engine.fit()
         
-    def recommend(self, anime_name, weights={'content': 0.4, 'collab': 0.6}, top_k=3):
+    def recommend(self, anime_name, weights={'content': 0.5, 'collab': 0.5}, top_k=3):
         # 1. Fuzzy Match / Lookup ID
         # Simple Case-Insensitive Exact Match first
         matches = self.anime_df[self.anime_df['name'].str.contains(anime_name, case=False, regex=False)]
