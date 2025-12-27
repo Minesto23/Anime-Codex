@@ -35,6 +35,87 @@ A modern, hybrid AI-powered anime recommendation application.
    streamlit run app.py
    ```
 
+## 🐳 Container Deployment
+
+This application supports both **Docker** and **Podman** container runtimes.
+
+### Quick Start with Podman/Docker Compose (Recommended)
+
+1. **Build and run**
+   ```bash
+   # With Podman
+   podman compose up -d
+   
+   # With Docker
+   docker-compose up -d
+   ```
+
+2. **Access the app**
+   - Open http://localhost:8501
+
+3. **View logs**
+   ```bash
+   # Podman
+   podman compose logs -f
+   
+   # Docker
+   docker-compose logs -f
+   ```
+
+4. **Stop the app**
+   ```bash
+   # Podman
+   podman compose down
+   
+   # Docker
+   docker-compose down
+   ```
+
+### Manual Build and Run
+
+#### Using Podman
+```bash
+# Build
+podman build -t anime-codex:latest .
+
+# Run
+podman run -d \
+  --name anime-codex \
+  -p 8501:8501 \
+  -v $(pwd)/data:/app/data:ro \
+  anime-codex:latest
+
+# Logs
+podman logs -f anime-codex
+
+# Stop
+podman stop anime-codex
+podman rm anime-codex
+```
+
+#### Using Docker
+```bash
+# Build
+docker build -t anime-codex:latest .
+
+# Run
+docker run -d \
+  --name anime-codex \
+  -p 8501:8501 \
+  -v $(pwd)/data:/app/data:ro \
+  --restart unless-stopped \
+  anime-codex:latest
+
+# Logs
+docker logs -f anime-codex
+
+# Stop
+docker stop anime-codex
+docker rm anime-codex
+```
+
+> **Note**: Podman users may see a HEALTHCHECK warning - this is normal and doesn't affect functionality.
+
 ## How It Works
 
 ### Hybrid Engine strategy
@@ -48,3 +129,13 @@ A modern, hybrid AI-powered anime recommendation application.
 - `app.py`: Main application entry point.
 - `src/`: Source code for models, data loading, and UI.
 - `data/`: Dataset storage (ignored in git).
+- `Dockerfile`: Container image definition.
+- `docker-compose.yml`: Orchestration configuration.
+
+## Tech Stack
+- **Backend**: Python 3.11, Pandas, scikit-learn
+- **Frontend**: Streamlit with Material UI design
+- **ML Models**: TF-IDF, Truncated SVD
+- **Deployment**: Docker/Podman, Docker Compose
+- **Containerization**: OCI-compliant images
+
